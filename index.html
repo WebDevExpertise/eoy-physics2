@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Computing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link href="styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter var', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <script src="index.js" type="module"></script>
+</head>
+<body class="bg-gray-900 text-white antialiased">
+    <div>
+        <!-- Quantum Computing Basic Info -->
+        <section id="basic-info" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+                            Quantum Computing
+                        </h2>
+                        <div class="space-y-6">
+                            <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-indigo-500/50 transition-colors">
+                                <h3 class="text-xl font-semibold text-indigo-400 mb-4">Definition</h3>
+                                <div class="prose prose-invert">
+                                    <p>Combines unique hardware and algorithms to process complicated problems faster than (but not necessarily better than) classical computers.</p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-colors">
+                                <h3 class="text-xl font-semibold text-purple-400 mb-4">Qubits</h3>
+                                <div class="prose prose-invert">
+                                    <p>Short for quantum bit. Basic unit of storing information and performing calculations in quantum computers.</p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-pink-500/50 transition-colors">
+                                <h3 class="text-xl font-semibold text-pink-400 mb-4">Why It's Useful</h3>
+                                <div class="prose prose-invert">
+                                    <p>In a complicated maze, a classical computer would "brute force" the problem and try every possible combination of paths (one path at a time) to find the correct one, whereas a quantum computer looks at a bird's-eye view of the maze, determines the paths that are most likely to be correct, and then tests those paths first.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/30 to-purple-500/30 rounded-3xl blur-3xl"></div>
+                        <div id="basic-info-demo" class="demo-container relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Superposition -->
+        <section id="superposition" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-cyan-500/20 to-teal-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                            Superposition
+                        </h2>
+                        <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-blue-500/50 transition-colors">
+                            <h3 class="text-xl font-semibold text-blue-400 mb-4">Definition</h3>
+                            <div class="prose prose-invert">
+                                <p>A quantum particle can represent more than one possibility (can represent a 0 and 1 at the same time, but only returns one value based on the inputs). State of a qubit collapses after measurements/results are made.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 rounded-3xl blur-3xl"></div>
+                        <div id="superposition-demo" class="demo-container relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50">
+                            <div class="grid grid-cols-2 h-full gap-4 p-4">
+                                <div class="bg-gray-800/80 rounded-2xl p-4 flex flex-col items-center justify-center">
+                                    <span class="text-sm font-medium text-gray-400 mb-2">Classical Bit</span>
+                                    <div id="classical-bit-demo" class="w-full h-full"></div>
+                                </div>
+                                <div class="bg-gray-800/80 rounded-2xl p-4 flex flex-col items-center justify-center">
+                                    <span class="text-sm font-medium text-gray-400 mb-2">Quantum Bit</span>
+                                    <div id="quantum-bit-demo" class="w-full h-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Entanglement -->
+        <section id="entanglement" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-500/20 via-fuchsia-500/20 to-pink-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400">
+                            Quantum Entanglement
+                        </h2>
+                        <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-violet-500/50 transition-colors">
+                            <h3 class="text-xl font-semibold text-violet-400 mb-4">Definition</h3>
+                            <div class="prose prose-invert">
+                                <p>One quantum particle can influence another particle since they are interconnected.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-violet-500/30 to-fuchsia-500/30 rounded-3xl blur-3xl"></div>
+                        <div id="entanglement-demo" class="demo-container relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50">
+                            <div class="grid grid-cols-2 h-full gap-4 p-4">
+                                <div class="bg-gray-800/80 rounded-2xl p-4 flex flex-col items-center justify-center">
+                                    <span class="text-sm font-medium text-gray-400 mb-2">Classical Bits</span>
+                                    <div id="classical-entanglement-demo" class="w-full h-full"></div>
+                                </div>
+                                <div class="bg-gray-800/80 rounded-2xl p-4 flex flex-col items-center justify-center">
+                                    <span class="text-sm font-medium text-gray-400 mb-2">Entangled Qubits</span>
+                                    <div id="quantum-entanglement-demo" class="w-full h-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decoherence -->
+        <section id="decoherence" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-gray-500/20 via-gray-600/20 to-gray-700/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-400 to-gray-600">
+                            Decoherence
+                        </h2>
+                        <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-gray-500/50 transition-colors">
+                            <h3 class="text-xl font-semibold text-gray-400 mb-4">Definition</h3>
+                            <div class="prose prose-invert">
+                                <p>A quantum state can collapse into a non-quantum state. The collapse of qubits into a non-quantum state allows quantum computers to interact with classical computers regarding their computations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-gray-500/30 to-gray-600/30 rounded-3xl blur-3xl"></div>
+                        <div id="decoherence-demo" class="demo-container relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interference -->
+        <section id="interference" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-500/20 via-lime-500/20 to-yellow-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-lime-400">
+                            Interference
+                        </h2>
+                        <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-green-500/50 transition-colors">
+                            <h3 class="text-xl font-semibold text-green-400 mb-4">Definition</h3>
+                            <div class="prose prose-invert">
+                                <p>Entangled (related) qubits present information in a wave-like structure, with outcomes representing amplitudes. Constructive interference occurs when many qubits peak at a particular outcome. Destructive interference occurs when the probability of an outcome is unlikely.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-green-500/30 to-lime-500/30 rounded-3xl blur-3xl"></div>
+                        <div id="interference-demo" class="demo-container relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Concepts Visualization -->
+        <section id="all-concepts" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-cyan-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="text-center space-y-8 mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400">
+                        How They Work Together
+                    </h2>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/30 to-teal-500/30 rounded-3xl blur-3xl"></div>
+                    <div id="all-concepts-demo" class="demo-container relative bg-gray-800/50 backdrop-blur-xl rounded-3xl border border-gray-700/50 h-[700px]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why It Works -->
+        <section id="why-it-works" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-500/20 via-red-500/20 to-pink-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="text-center space-y-8 mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-400">
+                        Why Quantum Computing Works
+                    </h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-orange-500/50 transition-colors">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-orange-400">Cold Temperatures</h3>
+                        </div>
+                        <div class="prose prose-invert">
+                            <p>Quantum computers require extremely cold temperatures to maintain quantum states and prevent decoherence, typically operating near absolute zero.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-red-500/50 transition-colors">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-red-400">Faster Algorithms</h3>
+                        </div>
+                        <div class="prose prose-invert">
+                            <p>Quantum algorithms can process certain types of problems exponentially faster than classical computers by leveraging quantum properties like superposition and entanglement.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-pink-500/50 transition-colors">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-pink-400">High Investments</h3>
+                        </div>
+                        <div class="prose prose-invert">
+                            <p>Companies like IBM have dedicated facilities for research and quantum processing so that the computers can operate under ideal conditions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Limitations -->
+        <section id="limitations" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-red-500/20 via-orange-500/20 to-yellow-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="text-center space-y-8 mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-orange-400">
+                        Limitations
+                    </h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-red-500/50 transition-colors">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-red-400">Temperature Issues</h3>
+                        </div>
+                        <div class="prose prose-invert">
+                            <p>Quantum computers require unsustainable temperatures near absolute zero, making them extremely expensive and energy-intensive to operate.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-orange-500/50 transition-colors">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-orange-400">Error-Prone</h3>
+                        </div>
+                        <div class="prose prose-invert">
+                            <p>Quantum systems are highly sensitive to environmental interference, leading to computational errors and unreliable results.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-yellow-500/50 transition-colors">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-yellow-400">Decoherence</h3>
+                        </div>
+                        <div class="prose prose-invert">
+                            <p>Unexpected decoherence can occur when quantum states collapse prematurely, disrupting calculations and causing system failures.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases -->
+        <section id="use-cases" class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-indigo-500/20"></div>
+            <div class="container mx-auto px-4 relative">
+                <div class="text-center space-y-8 mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
+                        Use Cases
+                    </h2>
+                </div>
+                <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 hover:border-purple-500/50 transition-colors">
+                    <div class="prose prose-invert max-w-none">
+                        <div class="space-y-6">
+                            <div class="border-l-4 border-purple-500 pl-6">
+                                <h4 class="text-lg font-semibold text-purple-400 mb-2">Pharmaceuticals</h4>
+                                <p>Quantum computers can simulate molecular behavior and biochemical reactions to speed up research and development of medical treatments.</p>
+                            </div>
+                            <div class="border-l-4 border-blue-500 pl-6">
+                                <h4 class="text-lg font-semibold text-blue-400 mb-2">Chemistry</h4>
+                                <p>Quantum computers can find possible safe solutions to issues or better alternatives to existing processes.</p>
+                            </div>
+                            <div class="border-l-4 border-indigo-500 pl-6">
+                                <h4 class="text-lg font-semibold text-indigo-400 mb-2">Machine Learning</h4>
+                                <p>Helps to test the limits of existing machine learning systems and increases the speed of machine learning problems.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+</body>
+</html>

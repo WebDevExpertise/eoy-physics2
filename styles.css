@@ -1,0 +1,149 @@
+/* Base styles */
+@layer base {
+    body {
+        scroll-behavior: smooth;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Fix for text with descenders (g, y, p, q, j) */
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    padding-bottom: 0.125rem;
+    overflow: visible;
+}
+
+.text-4xl, .text-5xl {
+    line-height: 1.1;
+    padding-bottom: 0.25rem;
+}
+
+/* Ensure gradient text doesn't get clipped */
+.bg-clip-text {
+    -webkit-background-clip: text;
+    background-clip: text;
+    padding-bottom: 0.25rem;
+    line-height: 1.15;
+}
+
+/* Demo container styles */
+.demo-container {
+    position: relative;
+    height: 500px;
+    transition: all 0.3s ease-in-out;
+}
+
+.demo-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+}
+
+/* Quantum box styles */
+.quantum-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Prose styles for content */
+.prose {
+    max-width: none;
+}
+
+.prose-invert {
+    --tw-prose-body: theme('colors.gray.300');
+    --tw-prose-headings: theme('colors.white');
+    --tw-prose-links: theme('colors.indigo.400');
+    --tw-prose-links-hover: theme('colors.indigo.300');
+    --tw-prose-underline: theme('colors.indigo.400/40');
+    --tw-prose-underline-hover: theme('colors.indigo.400/60');
+}
+
+/* Ensure proper spacing for all text elements */
+.space-y-8 > * {
+    padding-bottom: 0.125rem;
+}
+
+/* Fix for section titles and headings */
+section h2, section h3 {
+    overflow: visible !important;
+    line-height: 1.15 !important;
+    padding-bottom: 0.25rem;
+}
+
+/* Interactive elements */
+.interactive-element {
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-element:hover {
+    transform: scale(1.05);
+}
+
+/* Demo section specific styles */
+#basic-info-demo canvas,
+#superposition-demo canvas,
+#entanglement-demo canvas,
+#classical-entanglement-demo canvas,
+#quantum-entanglement-demo canvas,
+#decoherence-demo canvas,
+#interference-demo canvas,
+#all-concepts-demo canvas {
+    border-radius: 1rem;
+}
+
+/* Enhanced demo containers for specific sections */
+#all-concepts-demo {
+    min-height: 700px;
+}
+
+/* Gradient animations */
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-gradient {
+    animation: gradient-shift 8s ease infinite;
+    background-size: 200% 200%;
+}
+
+/* Icon styling for cards */
+.bg-orange-500\/20,
+.bg-red-500\/20,
+.bg-yellow-500\/20,
+.bg-purple-500\/20 {
+    backdrop-filter: blur(8px);
+}
+
+/* Enhanced hover effects for limitation cards */
+.hover\:border-red-500\/50:hover,
+.hover\:border-orange-500\/50:hover,
+.hover\:border-yellow-500\/50:hover {
+    box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .demo-container {
+        height: 350px;
+    }
+    
+    #all-concepts-demo {
+        height: 450px !important;
+    }
+    
+    .text-4xl {
+        font-size: 2rem;
+    }
+}
