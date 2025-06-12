@@ -1,6 +1,6 @@
-export class QuantumCircuitDemo {
+export class MazeDemo {
+    // Sets up the maze demonstration with initial properties and predefined solution paths
     constructor() {
-        console.log('QuantumCircuitDemo constructor called');
         this.canvas = null;
         this.ctx = null;
         this.maze = [];
@@ -11,9 +11,18 @@ export class QuantumCircuitDemo {
         this.quantumSolvers = [];
         this.isRunning = false;
         this.animationId = null;
+        this.startTime = null;
+        this.stopwatchInterval = null;
         this.init();
+        this.paths = [
+            [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 3, y: 2}, {x: 3, y: 3}, {x: 4, y: 3}, {x: 5, y: 3}, {x: 6, y: 3}, {x: 7, y: 3}],
+            [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 3, y: 2}, {x: 3, y: 3}, {x: 4, y: 3}, {x: 5, y: 3}, {x: 5, y: 2}, {x: 5, y: 1}, {x: 6, y: 1}, {x: 7, y: 1}, {x: 8, y: 1}, {x: 9, y: 1}],
+            [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 2, y: 5}, {x: 3, y: 5}, {x: 3, y: 6}, {x: 3, y: 7}, {x: 2, y: 7}, {x: 1, y: 7}],
+            [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5}, {x: 5, y: 6}, {x: 5, y: 7}, {x: 5, y: 7}, {x: 6, y: 7}, {x: 7, y: 7}, {x: 8, y: 7}, {x: 9, y: 7}, {x: 10, y: 7}, {x: 11, y: 7}, {x: 12, y: 7}, {x: 13, y: 7}, {x: 13, y: 8}],
+        ];
     }
 
+    // Creates the canvas, maze, solvers, controls and starts the animation
     init() {
         this.createCanvas();
         this.generateMaze();
@@ -22,42 +31,65 @@ export class QuantumCircuitDemo {
         this.animate();
     }
 
+    // Creates a 2D canvas with proper scaling for clear display on all devices
     createCanvas() {
         const container = document.getElementById('all-concepts-demo');
         if (!container) {
-            console.error('Container not found for maze demo');
             return;
         }
 
         this.canvas = document.createElement('canvas');
-        this.canvas.width = 600;
-        this.canvas.height = 360;
+        
+        const mazeWidth = 15;
+        const mazeHeight = 9;
+        const idealCellSize = 45;
+        
+        const canvasWidth = mazeWidth * idealCellSize;
+        const canvasHeight = mazeHeight * idealCellSize;
+        
+        const dpr = window.devicePixelRatio || 1;
+        
+        this.canvas.width = canvasWidth * dpr;
+        this.canvas.height = canvasHeight * dpr;
+        
+        this.canvas.style.width = canvasWidth + 'px';
+        this.canvas.style.height = canvasHeight + 'px';
+        
+        this.ctx = this.canvas.getContext('2d');
+        
+        this.ctx.scale(dpr, dpr);
+        
+        this.cellSize = idealCellSize;
+        
         this.canvas.style.cssText = `
-            width: 100%;
-            height: 100%;
             background: #0f172a;
             border-radius: 1.5rem;
             box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+            display: block;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
         `;
-        this.ctx = this.canvas.getContext('2d');
+        
         container.appendChild(this.canvas);
-        console.log('Maze canvas created and added to container');
     }
 
+    // Creates the maze layout with walls (1) and open paths (0)
     generateMaze() {
         this.maze = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,0,0,0,1,0,0,0,0,0,1,0,0,0,1],
             [1,0,1,0,1,0,1,1,1,0,1,0,1,0,1],
             [1,0,1,0,0,0,0,0,1,0,0,0,1,0,1],
-            [1,0,1,1,1,1,1,0,1,1,1,0,1,0,1],
-            [1,0,0,0,0,0,1,0,0,0,0,0,1,0,1],
-            [1,1,1,0,1,0,1,1,1,1,1,0,0,0,1],
-            [1,0,0,0,1,0,0,0,0,0,0,0,1,0,1],
-            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            [1,0,1,1,1,1,1,0,1,1,1,1,1,0,1],
+            [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
+            [1,1,1,0,1,0,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,0,1]
         ];
     }
 
+    // Sets up the classical and quantum solver objects with their initial properties
     initializeSolvers() {
         this.classicalSolver = {
             x: this.start.x,
@@ -75,46 +107,42 @@ export class QuantumCircuitDemo {
         ];
     }
 
+    // Sets up click event listeners for the classical and quantum solver buttons
     addControls() {
-        // Simple event listeners for existing HTML buttons
-        const classicalBtn = document.getElementById('maze-classical-btn');
-        const quantumBtn = document.getElementById('maze-quantum-btn');
-        const raceBtn = document.getElementById('maze-race-btn');
+        setTimeout(() => {
+            const classicalBtn = document.getElementById('maze-classical-btn');
+            const quantumBtn = document.getElementById('maze-quantum-btn');
+            
+            if (classicalBtn) {
+                classicalBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.runClassicalSolver();
+                });
+            }
         
-        console.log('Buttons found:', classicalBtn, quantumBtn, raceBtn);
-        
-        if (classicalBtn) {
-            classicalBtn.addEventListener('click', () => {
-                console.log('Classical solver button clicked');
-                this.runClassicalSolver();
-            });
-        }
-        
-        if (quantumBtn) {
-            quantumBtn.addEventListener('click', () => {
-                console.log('Quantum solver button clicked');
-                this.runQuantumSolver();
-            });
-        }
-        
-        if (raceBtn) {
-            raceBtn.addEventListener('click', () => {
-                console.log('Race button clicked');
-                this.runRace();
-            });
-        }
-        
-        console.log('Maze controls initialized');
+            if (quantumBtn) {
+                quantumBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.runQuantumSolver();
+                });
+            }
+        }, 100);
     }
 
+    // Clears the canvas and draws all maze elements in the correct order
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        const logicalWidth = this.canvas.width / (window.devicePixelRatio || 1);
+        const logicalHeight = this.canvas.height / (window.devicePixelRatio || 1);
+        this.ctx.clearRect(0, 0, logicalWidth, logicalHeight);
         this.drawMaze();
         this.drawStartAndGoal();
         this.drawTrails();
         this.drawSolvers();
     }
 
+    // Draws the maze walls and open paths with different colors
     drawMaze() {
         for (let row = 0; row < this.maze.length; row++) {
             for (let col = 0; col < this.maze[row].length; col++) {
@@ -135,6 +163,7 @@ export class QuantumCircuitDemo {
         }
     }
 
+    // Draws the start and goal markers with labels
     drawStartAndGoal() {
         const startX = this.start.x * this.cellSize + this.cellSize / 2;
         const startY = this.start.y * this.cellSize + this.cellSize / 2;
@@ -161,6 +190,7 @@ export class QuantumCircuitDemo {
         this.ctx.fillText('GOAL', goalX, goalY + 28);
     }
 
+    // Draws the classical and quantum solver dots on the maze
     drawSolvers() {
         if (this.classicalSolver.visible) {
             const x = this.classicalSolver.x * this.cellSize + this.cellSize / 2;
@@ -195,6 +225,7 @@ export class QuantumCircuitDemo {
         });
     }
 
+    // Draws colored trails showing the paths taken by the solvers
     drawTrails() {
         this.ctx.lineWidth = 3;
         this.ctx.lineCap = 'round';
@@ -236,34 +267,31 @@ export class QuantumCircuitDemo {
         });
     }
 
+    // Runs the classical pathfinding algorithm by trying each path sequentially
     async runClassicalSolver() {
-        console.log('runClassicalSolver called');
         if (this.isRunning) return;
         this.isRunning = true;
-        this.updateStatus('Classical solver: Trying paths sequentially...');
+        this.disableButtons();
+        this.updateStatus('Trying paths sequentially...');
         
         this.resetSolvers();
         this.classicalSolver.visible = true;
+        this.startStopwatch();
         
-        const paths = [
-            [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 3, y: 2}, {x: 3, y: 3}, {x: 2, y: 3}, {x: 1, y: 3}],
-            [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5}, {x: 6, y: 5}, {x: 7, y: 5}, {x: 8, y: 5}, {x: 9, y: 5}, {x: 10, y: 5}, {x: 11, y: 5}, {x: 12, y: 5}, {x: 13, y: 5}, {x: 13, y: 6}, {x: 13, y: 7}]
-        ];
-        
-        for (let pathIndex = 0; pathIndex < paths.length; pathIndex++) {
-            this.updateStatus(`Classical: Trying path ${pathIndex + 1}...`);
+        for (let pathIndex = 0; pathIndex < this.paths.length; pathIndex++) {
+            this.updateStatus(`Trying path ${pathIndex + 1} of ${this.paths.length}...`);
             
-            for (let step = 0; step < paths[pathIndex].length; step++) {
-                const pos = paths[pathIndex][step];
+            for (let step = 0; step < this.paths[pathIndex].length; step++) {
+                const pos = this.paths[pathIndex][step];
                 this.classicalSolver.x = pos.x;
                 this.classicalSolver.y = pos.y;
                 this.classicalSolver.trail.push({...pos});
                 this.draw();
-                await this.sleep(120);
+                await this.sleep(100);
             }
             
-            if (pathIndex === 0) {
-                this.updateStatus('Path 1 hit dead end - backtracking...');
+            if (pathIndex < this.paths.length - 1) {
+                this.updateStatus(`Path ${pathIndex + 1} hit a dead end. Backtracking...`);
                 await this.sleep(800);
                 this.classicalSolver.x = this.start.x;
                 this.classicalSolver.y = this.start.y;
@@ -272,31 +300,29 @@ export class QuantumCircuitDemo {
             }
         }
         
-        this.updateStatus('Classical solver found the path!');
+        const finalTime = this.stopStopwatch();
+        this.updateStatus(`Classical solver found the path in ${finalTime.toFixed(2)}s`);
         this.isRunning = false;
+        this.enableButtons();
     }
 
+    // Runs the quantum pathfinding showing superposition, entanglement, interference, and decoherence
     async runQuantumSolver() {
         if (this.isRunning) return;
         this.isRunning = true;
-        this.updateStatus('Quantum solver: Superposition - exploring all paths simultaneously!');
+        this.disableButtons();
+        this.updateStatus('Superposition (exploring all paths simultaneously)');
         
         this.resetSolvers();
         this.quantumSolvers.forEach(solver => solver.visible = true);
+        this.startStopwatch();
         
-        const paths = [
-            [{x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 3, y: 2}, {x: 3, y: 3}, {x: 2, y: 3}, {x: 1, y: 3}],
-            [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5}, {x: 6, y: 5}],
-            [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 1, y: 6}, {x: 1, y: 7}, {x: 2, y: 7}, {x: 3, y: 7}, {x: 4, y: 7}, {x: 5, y: 7}, {x: 6, y: 7}],
-            [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5}, {x: 6, y: 5}, {x: 7, y: 5}, {x: 8, y: 5}, {x: 9, y: 5}, {x: 10, y: 5}, {x: 11, y: 5}, {x: 12, y: 5}, {x: 13, y: 5}, {x: 13, y: 6}, {x: 13, y: 7}]
-        ];
-        
-        const maxSteps = Math.max(...paths.map(p => p.length));
-        
+        const maxSteps = Math.max(...this.paths.map(p => p.length));
+
         for (let step = 0; step < maxSteps; step++) {
             for (let i = 0; i < this.quantumSolvers.length; i++) {
-                if (paths[i] && paths[i][step]) {
-                    const pos = paths[i][step];
+                if (this.paths[i] && this.paths[i][step]) {
+                    const pos = this.paths[i][step];
                     this.quantumSolvers[i].x = pos.x;
                     this.quantumSolvers[i].y = pos.y;
                     this.quantumSolvers[i].trail.push({...pos});
@@ -306,17 +332,17 @@ export class QuantumCircuitDemo {
             await this.sleep(80);
         }
         
-        this.updateStatus('Entanglement: Connected quantum paths...');
+        this.updateStatus('Entanglement (all quantum path results "communicate" with each other...');
         await this.sleep(1000);
         
-        this.updateStatus('Interference: Eliminating impossible paths...');
+        this.updateStatus('Interference (dead-end paths destructively interfere and fade)...');
         for (let i = 0; i < 3; i++) {
-            this.quantumSolvers[i].opacity *= 0.2;
+            this.quantumSolvers[i].opacity *= 0.15;
         }
         this.draw();
-        await this.sleep(1000);
-        
-        this.updateStatus('Measurement: Quantum state collapses to optimal path!');
+        await this.sleep(1500);
+
+        this.updateStatus('Decoherence (quantum state collapses to the correct solution)');
         for (let i = 0; i < 3; i++) {
             this.quantumSolvers[i].visible = false;
         }
@@ -324,64 +350,17 @@ export class QuantumCircuitDemo {
         this.quantumSolvers[3].opacity = 1.0;
         this.draw();
         
+        const finalTime = this.stopStopwatch();
+        this.updateStatus(`Quantum solver found the path in ${finalTime.toFixed(2)}s`);
         this.isRunning = false;
+        this.enableButtons();
     }
 
-    async runRace() {
-        if (this.isRunning) return;
-        this.isRunning = true;
-        this.updateStatus('RACE MODE: Classical vs Quantum - Who finds the path faster?');
-        
-        this.resetSolvers();
-        this.classicalSolver.visible = true;
-        this.quantumSolvers.forEach(solver => solver.visible = true);
-        
-        const classicalPromise = this.runClassicalRace();
-        const quantumPromise = this.runQuantumRace();
-        
-        await Promise.race([classicalPromise, quantumPromise]);
-        
-        this.updateStatus('Quantum wins! Parallelism beats sequential search.');
-        this.isRunning = false;
-    }
-
-    async runClassicalRace() {
-        const path = [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5}, {x: 6, y: 5}, {x: 7, y: 5}, {x: 8, y: 5}, {x: 9, y: 5}, {x: 10, y: 5}, {x: 11, y: 5}, {x: 12, y: 5}, {x: 13, y: 5}, {x: 13, y: 6}, {x: 13, y: 7}];
-        
-        for (let step = 0; step < path.length; step++) {
-            const pos = path[step];
-            this.classicalSolver.x = pos.x;
-            this.classicalSolver.y = pos.y;
-            this.classicalSolver.trail.push({...pos});
-            this.draw();
-            await this.sleep(150);
-        }
-    }
-
-    async runQuantumRace() {
-        const path = [{x: 1, y: 1}, {x: 1, y: 2}, {x: 1, y: 3}, {x: 1, y: 4}, {x: 1, y: 5}, {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5}, {x: 6, y: 5}, {x: 7, y: 5}, {x: 8, y: 5}, {x: 9, y: 5}, {x: 10, y: 5}, {x: 11, y: 5}, {x: 12, y: 5}, {x: 13, y: 5}, {x: 13, y: 6}, {x: 13, y: 7}];
-        
-        this.quantumSolvers.forEach(solver => solver.visible = true);
-        
-        for (let step = 0; step < path.length; step++) {
-            const pos = path[step];
-            this.quantumSolvers.forEach(solver => {
-                solver.x = pos.x;
-                solver.y = pos.y;
-                solver.trail.push({...pos});
-            });
-            this.draw();
-            await this.sleep(60);
-        }
-        
-        for (let i = 1; i < this.quantumSolvers.length; i++) {
-            this.quantumSolvers[i].visible = false;
-        }
-        this.quantumSolvers[0].color = '#22c55e';
-        this.draw();
-    }
-
+    // Resets all solvers to their starting positions and clears their trails
     resetSolvers() {
+        this.stopStopwatch();
+        this.updateStopwatch(0);
+        
         this.classicalSolver.x = this.start.x;
         this.classicalSolver.y = this.start.y;
         this.classicalSolver.visible = false;
@@ -397,6 +376,7 @@ export class QuantumCircuitDemo {
         });
     }
 
+    // Updates the status message displayed to the user
     updateStatus(message) {
         const statusDisplay = document.getElementById('maze-status-display');
         if (statusDisplay) {
@@ -404,10 +384,56 @@ export class QuantumCircuitDemo {
         }
     }
 
+    // Updates the stopwatch display with the current time
+    updateStopwatch(time) {
+        const stopwatchDisplay = document.getElementById('maze-stopwatch');
+        if (stopwatchDisplay) {
+            stopwatchDisplay.textContent = `⏱️ ${time.toFixed(2)}s`;
+        }
+    }
+
+    // Starts the timer and updates it every 10ms for smooth animation
+    startStopwatch() {
+        this.startTime = Date.now();
+        this.stopwatchInterval = setInterval(() => {
+            const elapsed = (Date.now() - this.startTime) / 1000;
+            this.updateStopwatch(elapsed);
+        }, 10);
+    }
+
+    // Stops the timer and returns the final elapsed time
+    stopStopwatch() {
+        if (this.stopwatchInterval) {
+            clearInterval(this.stopwatchInterval);
+            this.stopwatchInterval = null;
+        }
+        const finalTime = this.startTime ? (Date.now() - this.startTime) / 1000 : 0;
+        this.updateStopwatch(finalTime);
+        return finalTime;
+    }
+
+    // Disables both solver buttons while a solver is running
+    disableButtons() {
+        const classicalBtn = document.getElementById('maze-classical-btn');
+        const quantumBtn = document.getElementById('maze-quantum-btn');
+        if (classicalBtn) classicalBtn.disabled = true;
+        if (quantumBtn) quantumBtn.disabled = true;
+    }
+
+    // Re-enables both solver buttons when solving is complete
+    enableButtons() {
+        const classicalBtn = document.getElementById('maze-classical-btn');
+        const quantumBtn = document.getElementById('maze-quantum-btn');
+        if (classicalBtn) classicalBtn.disabled = false;
+        if (quantumBtn) quantumBtn.disabled = false;
+    }
+
+    // Creates a delay for the specified number of milliseconds
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Continuously renders the maze display in a loop
     animate() {
         this.animationId = requestAnimationFrame(() => this.animate());
         this.draw();

@@ -2,6 +2,7 @@ import { CubeComponent } from '../components/CubeComponent.js';
 import { SceneComponent } from '../components/SceneComponent.js';
 
 export class DecoherenceDemo {
+    // Sets up the demo with initial state variables and starts the animation
     constructor() {
         this.hasBeenRotated = false;
         this.isCollapsed = false;
@@ -10,6 +11,7 @@ export class DecoherenceDemo {
         this.animate();
     }
 
+    // Creates the 3D scene and sets up the interactive cube
     init() {
         this.scene = new SceneComponent('decoherence-demo');
         if (!this.scene.container) return;
@@ -18,6 +20,7 @@ export class DecoherenceDemo {
         this.addControls();
     }
 
+    // Creates a cube with "0" and "1" text on different sides to show quantum superposition
     createDecoherenceCube() {
         const cubeComponent = new CubeComponent(0x3b82f6);
         this.cube = cubeComponent.create();
@@ -41,6 +44,7 @@ export class DecoherenceDemo {
         this.scene.add(this.cube);
     }
 
+    // Sets up mouse dragging to rotate the cube and clicking to collapse/reset quantum state
     addControls() {
         this.scene.addMouseControls(this.cube, (cube, deltaX) => {
             cube.rotation.y += deltaX * 0.008;
@@ -62,6 +66,7 @@ export class DecoherenceDemo {
         });
     }
 
+    // Collapses the quantum state to a fixed classical value based on cube rotation
     collapseToClassical() {
         this.isCollapsed = true;
         
@@ -87,6 +92,7 @@ export class DecoherenceDemo {
         this.updateInstructions();
     }
 
+    // Resets the cube back to quantum superposition state from collapsed classical state
     resetToQuantum() {
         this.isCollapsed = false;
         this.collapsedValue = null;
@@ -101,6 +107,7 @@ export class DecoherenceDemo {
         this.updateInstructions();
     }
 
+    // Changes the cube's color and appearance based on quantum vs classical state
     updateCubeAppearance() {
         const material = this.cube.material;
         const wireframe = this.cube.children.find(child => child.type === 'LineSegments');
@@ -118,6 +125,7 @@ export class DecoherenceDemo {
         }
     }
 
+    // Updates the instruction text shown to the user based on current state
     updateInstructions() {
         const quantumInstruction = document.getElementById('quantum-instruction');
         const classicalInstruction = document.getElementById('classical-instruction');
@@ -135,6 +143,7 @@ export class DecoherenceDemo {
         }
     }
 
+    // Hides all the "0" and "1" text elements on the cube
     hideAllText() {
         this.text0Front.visible = false;
         this.text1Right.visible = false;
@@ -142,6 +151,7 @@ export class DecoherenceDemo {
         this.text1Left.visible = false;
     }
 
+    // Shows the correct "0" or "1" text based on which side of the cube is facing forward
     updateTextVisibility() {
         if (this.isCollapsed) return;
 
@@ -161,6 +171,7 @@ export class DecoherenceDemo {
         }
     }
 
+    // Continuously renders the 3D scene and updates text visibility when cube rotates
     animate = () => {
         requestAnimationFrame(this.animate);
         

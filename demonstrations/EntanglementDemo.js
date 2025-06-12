@@ -2,12 +2,14 @@ import { CubeComponent } from '../components/CubeComponent.js';
 import { SceneComponent } from '../components/SceneComponent.js';
 
 export class EntanglementDemo {
+    // Sets up both classical and quantum entanglement demonstrations and starts animation
     constructor() {
         this.initClassicalEntanglement();
         this.initQuantumEntanglement();
         this.animate();
     }
 
+    // Creates the classical bits demo scene where each cube changes independently
     initClassicalEntanglement() {
         this.classicalScene = new SceneComponent('classical-entanglement-demo');
         if (!this.classicalScene.container) return;
@@ -16,6 +18,7 @@ export class EntanglementDemo {
         this.addClassicalClickControls();
     }
 
+    // Creates two gray cubes with different values that work independently
     createClassicalEntanglementCubes() {
         const cubeComponent = new CubeComponent(0x6b7280);
 
@@ -33,6 +36,7 @@ export class EntanglementDemo {
         this.classicalScene.add(this.classicalCube2);
     }
 
+    // Creates the quantum entanglement demo scene where cubes are connected
     initQuantumEntanglement() {
         this.quantumScene = new SceneComponent('quantum-entanglement-demo');
         if (!this.quantumScene.container) return;
@@ -41,6 +45,7 @@ export class EntanglementDemo {
         this.addQuantumClickControls();
     }
 
+    // Creates two blue cubes that will be entangled (connected) together
     createQuantumEntanglementCubes() {
         const cubeComponent = new CubeComponent(0x3b82f6);
 
@@ -58,6 +63,7 @@ export class EntanglementDemo {
         this.quantumScene.add(this.quantumCube2);
     }
 
+    // Sets up clicking for classical cubes - each cube changes only itself
     addClassicalClickControls() {
         this.classicalScene.addClickControls((raycaster) => {
             const intersects1 = raycaster.intersectObject(this.classicalCube1);
@@ -75,7 +81,8 @@ export class EntanglementDemo {
         });
     }
 
-    toggleValue(testedValue) {
+    // Changes both quantum cubes when one is clicked to show entanglement effect
+    toggleClassicalValue(testedValue) {
         const newValue = testedValue === '0' ? '1' : '0';
         
         if (this.quantumValue1 === testedValue) {
@@ -91,20 +98,22 @@ export class EntanglementDemo {
         return;
     }
 
+    // Sets up clicking for quantum cubes. Clicking one affects both cubes
     addQuantumClickControls() {
         this.quantumScene.addClickControls((raycaster) => {
             const intersects1 = raycaster.intersectObject(this.quantumCube1);
             if (intersects1.length > 0) {
-                this.toggleValue(this.quantumValue1);
+                this.toggleClassicalValue(this.quantumValue1);
             }
 
             const intersects2 = raycaster.intersectObject(this.quantumCube2);
             if (intersects2.length > 0) {
-                this.toggleValue(this.quantumValue2);
+                this.toggleClassicalValue(this.quantumValue2);
             }
         });
     }
 
+    // Updates the text display on a classical cube when its value changes
     updateClassicalText(cubeNumber) {
         if (cubeNumber === 1) {
             this.classicalCube1.remove(this.classicalText1);
@@ -117,6 +126,7 @@ export class EntanglementDemo {
         }
     }
 
+    // Updates the text display on a quantum cube when its value changes
     updateQuantumText(cubeNumber) {
         if (cubeNumber === 1) {
             this.quantumCube1.remove(this.quantumText1);
@@ -129,6 +139,7 @@ export class EntanglementDemo {
         }
     }
 
+    // Continuously renders both the classical and quantum demonstration scenes
     animate = () => {
         requestAnimationFrame(this.animate);
         

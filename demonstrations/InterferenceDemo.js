@@ -2,6 +2,7 @@ import { CubeComponent } from '../components/CubeComponent.js';
 import { SceneComponent } from '../components/SceneComponent.js';
 
 export class InterferenceDemo {
+    // Sets up the interference demo with initial cube values and starts animation
     constructor() {
         this.cube1Value = '0';
         this.cube2Value = '1';
@@ -10,6 +11,7 @@ export class InterferenceDemo {
         this.animate();
     }
 
+    // Creates the 3D scene with cubes, connections, and controls
     init() {
         this.scene = new SceneComponent('interference-demo');
         if (!this.scene.container) return;
@@ -20,6 +22,7 @@ export class InterferenceDemo {
         this.updateInterference();
     }
 
+    // Creates three cubes - two input cubes at the top and one result cube at the bottom
     createInterferenceCubes() {
         const cubeComponent1 = new CubeComponent(0x10b981, 1.2);
         const cubeComponent2 = new CubeComponent(0x10b981, 1.2);
@@ -43,6 +46,7 @@ export class InterferenceDemo {
         this.scene.add(this.resultCube);
     }
 
+    // Creates visual lines connecting the input cubes to the result cube
     createConnectionLines() {
         const lineMaterial = new THREE.LineBasicMaterial({ 
             color: 0x22c55e, 
@@ -68,6 +72,7 @@ export class InterferenceDemo {
         this.scene.add(this.line2);
     }
 
+    // Sets up clicking on the input cubes to change their values
     addControls() {
         this.scene.addClickControls((raycaster) => {
             const intersects1 = raycaster.intersectObject(this.cube1);
@@ -81,18 +86,21 @@ export class InterferenceDemo {
         });
     }
 
+    // Changes the first cube's value between 0 and 1 when clicked
     toggleCube1Value() {
         this.cube1Value = this.cube1Value === '0' ? '1' : '0';
         this.updateCubeText(this.cube1, this.cube1Text, this.cube1Value);
         this.updateInterference();
     }
 
+    // Changes the second cube's value between 0 and 1 when clicked
     toggleCube2Value() {
         this.cube2Value = this.cube2Value === '0' ? '1' : '0';
         this.updateCubeText(this.cube2, this.cube2Text, this.cube2Value);
         this.updateInterference();
     }
 
+    // Updates the text display on a cube when its value changes
     updateCubeText(cube, currentText, newValue) {
         cube.remove(currentText);
         const cubeComponent = new CubeComponent(0x10b981, 1.2);
@@ -105,6 +113,7 @@ export class InterferenceDemo {
         }
     }
 
+    // Calculates and shows interference effects based on whether cube values match
     updateInterference() {
         const valuesMatch = this.cube1Value === this.cube2Value;
         const isConstructive = valuesMatch;
@@ -132,6 +141,7 @@ export class InterferenceDemo {
         this.updateConnectionColors(lineColor);
     }
 
+    // Shows instruction text for constructive interference (when values match)
     showConstructiveMode() {
         const constructiveInstruction = document.getElementById('constructive-instruction');
         const destructiveInstruction = document.getElementById('destructive-instruction');
@@ -142,6 +152,7 @@ export class InterferenceDemo {
         }
     }
 
+    // Shows instruction text for destructive interference (when values differ)
     showDestructiveMode() {
         const constructiveInstruction = document.getElementById('constructive-instruction');
         const destructiveInstruction = document.getElementById('destructive-instruction');
@@ -152,6 +163,7 @@ export class InterferenceDemo {
         }
     }
 
+    // Updates the bottom result cube's appearance and value based on interference
     updateResultCube(value, color, opacity) {
         this.resultCube.remove(this.resultText);
         this.resultCube.material.color.setHex(color);
@@ -172,11 +184,13 @@ export class InterferenceDemo {
         }
     }
 
+    // Changes the color of the connecting lines based on interference type
     updateConnectionColors(color) {
         this.line1.material.color.setHex(color);
         this.line2.material.color.setHex(color);
     }
 
+    // Continuously renders the scene and creates pulsing animation on the connection lines
     animate = () => {
         requestAnimationFrame(this.animate);
         

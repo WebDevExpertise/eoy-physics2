@@ -2,6 +2,7 @@ import { CubeComponent } from '../components/CubeComponent.js';
 import { SceneComponent } from '../components/SceneComponent.js';
 
 export class SuperpositionDemo {
+    // Sets up both classical and quantum bit demonstrations and starts animation
     constructor() {
         this.hasBeenRotated = false;
         this.initClassicalBit();
@@ -9,6 +10,7 @@ export class SuperpositionDemo {
         this.animate();
     }
 
+    // Creates the classical bit demo scene with a fixed value cube
     initClassicalBit() {
         this.classicalScene = new SceneComponent('classical-bit-demo');
         if (!this.classicalScene.container) return;
@@ -17,6 +19,7 @@ export class SuperpositionDemo {
         this.addClassicalMouseControls();
     }
 
+    // Creates a gray cube that always shows the same value (classical bit)
     createClassicalBitCube() {
         const cubeComponent = new CubeComponent(0x6b7280);
         this.classicalCube = cubeComponent.create();
@@ -26,6 +29,7 @@ export class SuperpositionDemo {
         this.classicalScene.add(this.classicalCube);
     }
 
+    // Creates the quantum bit demo scene with a superposition cube
     initQuantumBit() {
         this.quantumScene = new SceneComponent('quantum-bit-demo');
         if (!this.quantumScene.container) return;
@@ -34,6 +38,7 @@ export class SuperpositionDemo {
         this.addQuantumMouseControls();
     }
 
+    // Creates a blue cube with different values on each side to show superposition
     createQuantumBitCube() {
         const cubeComponent = new CubeComponent(0x3b82f6);
         this.quantumCube = cubeComponent.create();
@@ -57,12 +62,14 @@ export class SuperpositionDemo {
         this.quantumScene.add(this.quantumCube);
     }
 
+    // Sets up mouse dragging for the classical cube (rotates but shows same value)
     addClassicalMouseControls() {
         this.classicalScene.addMouseControls(this.classicalCube, (cube, deltaX) => {
             cube.rotation.y += deltaX * 0.008;
         });
     }
 
+    // Sets up mouse dragging for the quantum cube (rotates and shows different values)
     addQuantumMouseControls() {
         this.quantumScene.addMouseControls(this.quantumCube, (cube, deltaX) => {
             cube.rotation.y += deltaX * 0.008;
@@ -71,6 +78,7 @@ export class SuperpositionDemo {
         });
     }
 
+    // Shows the correct "0" or "1" text based on which side of the quantum cube is facing forward
     updateTextVisibility() {
         const rotY = ((this.quantumCube.rotation.y % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
         const deg = rotY * 180 / Math.PI;
@@ -91,6 +99,7 @@ export class SuperpositionDemo {
         }
     }
 
+    // Continuously renders both classical and quantum demonstration scenes
     animate = () => {
         requestAnimationFrame(this.animate);
         
