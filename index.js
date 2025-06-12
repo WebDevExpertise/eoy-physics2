@@ -1,1 +1,7 @@
-// Your custom 3D quantum computing demonstrations will go here
+import { SuperpositionDemo } from './demonstrations/SuperpositionDemo.js';
+import { EntanglementDemo } from './demonstrations/EntanglementDemo.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+    new SuperpositionDemo();
+    new EntanglementDemo();
+});
