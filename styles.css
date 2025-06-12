@@ -29,6 +29,34 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     height: 500px;
     transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#superposition-demo,
+#entanglement-demo {
+    height: 500px;
+    min-height: 500px;
+}
+
+.demo-container canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.control-panel {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.control-panel button {
+    position: relative;
+    z-index: 11;
+    pointer-events: auto;
 }
 
 .demo-container:hover {
@@ -74,6 +102,44 @@ section h2, section h3 {
     transform: scale(1.05);
 }
 
+#superposition-demo .flex,
+#entanglement-demo .flex {
+    width: 100%;
+    height: 100%;
+}
+
+#superposition-demo .flex-1,
+#entanglement-demo .flex-1 {
+    min-width: 0;
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+#classical-bit-demo,
+#quantum-bit-demo,
+#classical-entanglement-demo,
+#quantum-entanglement-demo {
+    min-width: 250px;
+    min-height: 300px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#classical-bit-demo canvas,
+#quantum-bit-demo canvas,
+#classical-entanglement-demo canvas,
+#quantum-entanglement-demo canvas {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto !important;
+    height: auto !important;
+}
+
 #basic-info-demo canvas,
 #superposition-demo canvas,
 #entanglement-demo canvas,
@@ -117,6 +183,51 @@ section h2, section h3 {
 .hover\:border-orange-500\/50:hover,
 .hover\:border-yellow-500\/50:hover {
     box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.2);
+}
+
+#maze-classical-btn,
+#maze-quantum-btn {
+    position: relative;
+    z-index: 20;
+    pointer-events: auto;
+    cursor: pointer;
+    display: inline-block;
+    min-height: 48px;
+    min-width: 120px;
+    transition: all 0.3s ease;
+}
+
+#maze-classical-btn:hover,
+#maze-quantum-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#maze-classical-btn:disabled,
+#maze-quantum-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    background: #6b7280 !important;
+}
+
+#maze-classical-btn:disabled:hover,
+#maze-quantum-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+#maze-status-display {
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#all-concepts-demo canvas {
+    pointer-events: none;
+    position: relative;
+    z-index: 1;
 }
 
 @media (max-width: 768px) {

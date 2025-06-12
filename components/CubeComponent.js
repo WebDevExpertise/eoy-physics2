@@ -1,10 +1,12 @@
 export class CubeComponent {
+    // Sets up the basic properties for creating a cube (color, size, transparency)
     constructor(color, size = 1.5, opacity = 0.05) {
         this.size = size;
         this.color = color;
         this.opacity = opacity;
     }
 
+    // Creates a 3D cube with the specified properties and adds a wireframe outline
     create() {
         const geometry = new THREE.BoxGeometry(this.size, this.size, this.size);
         const material = new THREE.MeshPhongMaterial({
@@ -29,6 +31,7 @@ export class CubeComponent {
         return cube;
     }
 
+    // Creates 3D text shapes - makes a ring shape for "0" and a line shape for "1"
     static createText(text, color = 0xffffff) {
         let textMesh;
         
@@ -54,6 +57,7 @@ export class CubeComponent {
         return textMesh;
     }
 
+    // Attaches a text shape (0 or 1) to a cube at a specific position
     addText(cube, text, x = 0, y = 0, z = 0) {
         const textMesh = CubeComponent.createText(text);
         textMesh.position.set(x, y, z);
